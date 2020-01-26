@@ -12,7 +12,7 @@ import firebaseConfig from './config';
 firebase.initializeApp(firebaseConfig);
 
 const MainNavigator = createSwitchNavigator({
-  Loading: { screen: LoadingScreen },
+  //Loading: { screen: LoadingScreen },
   Login: { screen: Loginscreen },
   Main: { screen: Mainscreen },
 });
