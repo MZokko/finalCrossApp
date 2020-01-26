@@ -10,6 +10,9 @@
   "dependencies": {
     "expo": "~36.0.0",
     "expo-google-app-auth": "^8.0.0",
+    "firebase": "^7.7.0",
+    "navigation": "^5.2.0",
+    "reac": "0.0.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
