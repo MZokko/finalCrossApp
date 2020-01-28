@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 
 import * as Google from "expo-google-app-auth";
+import firebase from 'firebase';
 
 const IOS_CLIENT_ID =
   "199703235521-flq3an8kgp0bmcdsv24aup9fhnp8o36a.apps.googleusercontent.com";
@@ -29,12 +30,18 @@ export default class Loginscreen extends Component {
     var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
       unsubscribe();
       // Check if we are already signed-in Firebase with the correct user.
-      if (!isUserEqual(googleUser, firebaseUser)) {
+      if (!this.isUserEqual(googleUser, firebaseUser)) {
         // Build Firebase credential with the Google ID token.
         var credential = firebase.auth.GoogleAuthProvider.credential(
-            googleUser.getAuthResponse().id_token);
+            googleUser.idToken,
+            googleUser.accessToken);
         // Sign in with credential from the Google user.
-        firebase.auth().signInWithCredential(credential).catch(function(error) {
+        firebase.auth()
+        .signInWithCredential(credential)
+        .then(()=>{
+          console.log('user sign in');
+        })
+        .catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
@@ -47,7 +54,7 @@ export default class Loginscreen extends Component {
       } else {
         console.log('User already signed-in Firebase.');
       }
-    });
+    }.bind(this));
   }
 
 
@@ -60,6 +67,7 @@ export default class Loginscreen extends Component {
       });
 
       if (result.type === "success") {
+        this.onSignIn(result);
         console.log("Loginscreen.js.js 21 | ", result.user.givenName);
         this.props.navigation.navigate("Profile", {
           username: result.user.givenName
