@@ -3,11 +3,13 @@ import { Text, View, StyleSheet, Button } from "react-native";
 
 import * as Google from "expo-google-app-auth";
 import firebase from 'firebase';
+import firebaseConfig from '../config';
+
 
 const IOS_CLIENT_ID =
-  "199703235521-flq3an8kgp0bmcdsv24aup9fhnp8o36a.apps.googleusercontent.com";
+  "903523458890-sshjf93gsetfrbqnqc3r832dmhv5le95.apps.googleusercontent.com";
 const ANDROID_CLIENT_ID =
-  "your-android-client-id";
+  "903523458890-ck1nm616us5le0fjj0lec454avq7gppk.apps.googleusercontent.com";
 
 export default class Loginscreen extends Component {
    isUserEqual=(googleUser, firebaseUser)=> {
