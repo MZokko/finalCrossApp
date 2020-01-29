@@ -1,6 +1,7 @@
 
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
+import firebase from 'firebase';
 
 export default class Mainscreen extends Component {
   render() {
@@ -12,7 +13,13 @@ export default class Mainscreen extends Component {
         </Text>
         <Button
           title="Sign out"
-          onPress={() => this.props.navigation.navigate("Login")}
+          onPress={() => {
+            firebase
+            .auth()
+            .signOut()
+            .then(this.props.navigation.navigate("Login"))
+            .catch(e => console.log(e));}}
+            //this.props.navigation.navigate("Login")}}
         />
       </View>
     );
