@@ -2,15 +2,16 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import firebase from 'firebase';
+//game
+import GameApp from '../Game/GameApp';
 
 export default class Mainscreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text> Profile Screen </Text>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-          Welcome, {this.props.navigation.getParam("username")}
-        </Text>
+        
+        <Button title="Start Game" onPress={this.props.navigation.navigate("Game")}/>
+        <Button title="Hall of Fame"/>
         <Button
           title="Sign out"
           onPress={() => {
@@ -19,7 +20,6 @@ export default class Mainscreen extends Component {
             .signOut()
             .then(this.props.navigation.navigate("Login"))
             .catch(e => console.log(e));}}
-            //this.props.navigation.navigate("Login")}}
         />
       </View>
     );

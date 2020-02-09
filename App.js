@@ -9,6 +9,8 @@ import LoadingScreen from './screens/LoadingScreen';
 //firebase
 import firebase from 'firebase';
 import firebaseConfig from './config';
+import GameApp from './Game/GameApp';
+import HallOfFame from './Game/screens/HallOfFameScreen';
 firebase.initializeApp(firebaseConfig);
 
 
@@ -16,6 +18,7 @@ const MainNavigator = createSwitchNavigator({
   Loading: { screen: LoadingScreen },
   Login: { screen: Loginscreen },
   Main: { screen: Mainscreen },
+  Game:{screen:GameApp},
 });
 
 const App = createAppContainer(MainNavigator);
