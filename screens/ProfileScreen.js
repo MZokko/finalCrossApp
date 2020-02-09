@@ -11,7 +11,16 @@ export default class ProfileScreen extends Component {
         </Text>
         <Button
           title="Sign out"
-          onPress={() => this.props.navigation.navigate("Login")}
+          onPress={() => {
+            firebase
+              .auth()
+              .signOut()
+              .then(() => {
+                this.props.navigation.navigate("Login");
+              })
+              .catch(e => console.log(e));
+          }}
+        //this.props.navigation.navigate("Login")}}
         />
       </View>
     );

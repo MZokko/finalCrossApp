@@ -1,65 +1,18 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
+import color from "../Game/constants/color";
 
 import * as Google from "expo-google-app-auth";
-import firebase from 'firebase';
-import firebaseConfig from '../config';
-
+import firebase from "firebase";
 
 const IOS_CLIENT_ID =
   "903523458890-sshjf93gsetfrbqnqc3r832dmhv5le95.apps.googleusercontent.com";
 const ANDROID_CLIENT_ID =
   "903523458890-ck1nm616us5le0fjj0lec454avq7gppk.apps.googleusercontent.com";
 
+var provider = new firebase.auth.GoogleAuthProvider();
+
 export default class Loginscreen extends Component {
-   isUserEqual=(googleUser, firebaseUser)=> {
-    if (firebaseUser) {
-      var providerData = firebaseUser.providerData;
-      for (var i = 0; i < providerData.length; i++) {
-        if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-            providerData[i].uid === googleUser.getBasicProfile().getId()) {
-          // We don't need to reauth the Firebase connection.
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-   onSignIn =(googleUser)=> {
-    console.log('Google Auth Response', googleUser);
-    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-    var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
-      unsubscribe();
-      // Check if we are already signed-in Firebase with the correct user.
-      if (!this.isUserEqual(googleUser, firebaseUser)) {
-        // Build Firebase credential with the Google ID token.
-        var credential = firebase.auth.GoogleAuthProvider.credential(
-            googleUser.idToken,
-            googleUser.accessToken);
-        // Sign in with credential from the Google user.
-        firebase.auth()
-        .signInWithCredential(credential)
-        .then(()=>{
-          console.log('user sign in');
-        })
-        .catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // The email of the user's account used.
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-          // ...
-        });
-      } else {
-        console.log('User already signed-in Firebase.');
-      }
-    }.bind(this));
-  }
-
-
   signInWithGoogle = async () => {
     try {
       const result = await Google.logInAsync({
@@ -69,19 +22,64 @@ export default class Loginscreen extends Component {
       });
 
       if (result.type === "success") {
-        this.onSignIn(result);
-        console.log("Loginscreen.js.js 21 | ", result.user.givenName);
+        console.log("Loginscreen.js.js 88 | ", result.user);
+        //add db
+        firebase
+          .database()
+          .ref(`users/${result.user.id}`)
+          .set({
+            gmail: result.user.email,
+            user_givenName: result.user.name
+          })
+          .then(snapshot => {
+            //console.log('Snapshot', snapshot);
+          });
+
+        //end add
         this.props.navigation.navigate("Profile", {
           username: result.user.givenName
-        }); 
+        });
         //after Google login redirect to Profile
-        this.props.navigation.navigate('Main');
+        //this.onSignIn(result);
+
+        firebase
+          .auth()
+          .signInWithPopup(provider)
+          .then(function(result) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            // ...
+            console.log("WAaaaaaaazaaaaaaaa", user, token);
+          })
+          .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+            console.log(
+              "errorCode==========",
+              errorCode,
+              "\n errorMessage============",
+              errorMessage,
+              "\n email==================",
+              email,
+              "\n credential==============",
+              credential
+            );
+          });
+        this.props.navigation.navigate("Main");
         return result.accessToken;
       } else {
         return { cancelled: true };
       }
     } catch (e) {
-      console.log('Loginscreen.js.js 30 | Error with login', e);
+      console.log("Loginscreen.js.js 101 | Error with login", e);
       return { error: true };
     }
   };
@@ -89,7 +87,11 @@ export default class Loginscreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button title="Login with Google" onPress={this.signInWithGoogle} />
+        <Button
+          title="Login with Google"
+          color={color.accent}
+          onPress={this.signInWithGoogle}
+        />
       </View>
     );
   }
