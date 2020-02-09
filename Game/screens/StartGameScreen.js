@@ -16,11 +16,6 @@ const StartGameScreen = props => {
 
     const [selectedNumber, setSelectedNumber] = useState();
 
-    const [goHighScore, setGoHighScore] = useState(false);
-
-
-   
-
     const numberInputHandler = inputText => {
         setEnteredValue(inputText.replace(/[^0-9]/g, ''));//make sure user cant enter anything else than a number
     };

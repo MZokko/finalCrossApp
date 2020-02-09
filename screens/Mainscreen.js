@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import firebase from "firebase";
 //game
-import GameApp from "../Game/GameApp";
 import color from "../Game/constants/color";
 import Header from "../Game/components/Header";
-import Card from "../Game/components/Card";
 
 export default class Mainscreen extends Component {
   render() {

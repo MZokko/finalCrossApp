@@ -1,10 +1,7 @@
-import React, { useState, Component } from "react";
+import React, { Component } from "react";
 import {
   View,
-  Text,
   StyleSheet,
-  TouchableOpacity,
-  FlatList,
   Button
 } from "react-native";
 import firebase from "firebase";
@@ -12,13 +9,25 @@ import Card from "../Game/components/Card";
 import Header from "../Game/components/Header";
 import color from "../Game/constants/color";
 
+
+
 export default class HallOfFameScreen extends Component {
+      setupHighscoreListener=()=>{
+        firebase.database().ref('HallOfFame').on('value',(snapshot) => {
+            console.log("what u get",snapshot);
+          snapshot.forEach(Object => {
+              console.log("just the object ?",snapshot.val())
+          });
+        });}
+
   render() {
+    
     return (
       <View>
         <Header title="Hall of Fame" />
         <Card>
-          <View style={styles.viewList}>
+          <View >
+              <Button title="try" onPress={()=>{this.setupHighscoreListener()}}/>
             {/* <FlatList
               keyExtractor={item => JSON.stringify(item.firebaseId)}
               data={toDoList}
@@ -41,27 +50,18 @@ export default class HallOfFameScreen extends Component {
           }}
         />
       </View>
-    );
+
+    );  
   }
 }
-
 const styles = StyleSheet.create({
+    screen: {
+      flex:1,
+    },
+    container:{
+      flex:2,
+      alignItems:"center",
+      justifyContent:"center",
+    }
     
-  container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  viewList: {
-    margin: 20,
-    alignItems: "center",
-    shadowColor: "black",
-    backgroundColor: "white",
-    //ios shadoe property
-    shadowOffset: { width: 0, hight: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.26,
-    //android shadow property
-    elevation: 5
-  }
-});
+  });

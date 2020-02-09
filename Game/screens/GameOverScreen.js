@@ -5,12 +5,10 @@ import {
   StyleSheet,
   Button,
   Vibration,
-  ToastAndroid
 } from "react-native";
 import Colors from "../constants/color";
 import Card from "../components/Card";
 import firebase from "firebase";
-import HallOfFame from "./HallOfFameScreen";
 
 const GameOverScreen = props => {
   return (

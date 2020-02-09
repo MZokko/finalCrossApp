@@ -6,31 +6,20 @@ import Header from './components/Header';
 import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
-import MyHighScoreScreen from './screens/MyHighScoreScreen';
-import HallOfFameScreen from './screens/HallOfFameScreen';
-import Colors from "../Game/constants/color";
-import HallOfFame from './screens/HallOfFameScreen';
+
 
 export default function GameApp() {
 
   const [userNumber, setUserNumber] = useState(0);
   const [guessRound, setGuessRound] = useState(0);
-  const [myTimer, setMyTimer] = useState(0);
-  const [goHighScore, setGoHighScore] = useState(false);
-  const [goHallOfFame,setGoHallOfFame]=useState(false);
+
 
   const HallOfFameHandler = (boolean) => {
     setGoHallOfFame(boolean);
   };
 
-
-  const MyHighScoreHandler = (boolean) => {
-    setGoHighScore(boolean);
-  };
-
   const configureNewGameHandler = () => {
-    setGoHighScore(false);
-    setGoHallOfFame(false);
+
     setGuessRound(0);
     setUserNumber(null);
   };
@@ -41,7 +30,6 @@ export default function GameApp() {
 
   const gameOverHandler = (nbOfRound, time) => {
     setGuessRound(nbOfRound);
-    setMyTimer(time);
   };
 
   let content = <StartGameScreen onStartGame={StartGameHandler}  />;
@@ -51,8 +39,6 @@ export default function GameApp() {
     } else if (guessRound > 0) {
       content = <GameOverScreen roundsNumber={guessRound} userNumber={userNumber} onRestart={configureNewGameHandler} onHallOfFame={HallOfFameHandler}/>;
     }
-
-
 
   return (
     <View style={styles.screen}>
