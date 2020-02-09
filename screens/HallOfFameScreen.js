@@ -19,14 +19,6 @@ export default class HallOfFameScreen extends Component {
         const item = Object.values(fame);
         this.setState({ hallOfFameScore: item });
       });
-    //console.log("item====",item);
-    console.log("state=====", this.state.hallOfFameScore);
-    console.log(
-      "my object transc==",
-      Object.keys(this.state.hallOfFameScore).map(key => ({
-        roundsNumber: key.valueOf()
-      }))
-    );
   };
 
   render() {
@@ -56,22 +48,6 @@ export default class HallOfFameScreen extends Component {
               ))}
             </ScrollView>
           </View>
-          {/* {async()=>{
-              this.state.hallOfFameScore.forEach(Object.values(this.state.hallOfFameScore) => {
-                
-              });
-            }} */}
-          {/* <FlatList
-              keyExtractor={item => JSON.stringify(item.firebaseId)}
-              data={toDoList}
-              renderItem={(taskData, idx) => (
-                <TodoItem
-                  key={idx}
-                  item={taskData.item}
-                  onDelete={removeTaskHandler}
-                />
-              )}
-            /> */}
         </View>
 
         <Button
