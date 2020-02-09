@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 //component
 import Header from './components/Header';
@@ -8,6 +8,8 @@ import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
 import MyHighScoreScreen from './screens/MyHighScoreScreen';
 import HallOfFameScreen from './screens/HallOfFameScreen';
+import Colors from "../Game/constants/color";
+import HallOfFame from './screens/HallOfFameScreen';
 
 export default function GameApp() {
 
@@ -47,7 +49,7 @@ export default function GameApp() {
     if (userNumber && guessRound <= 0) {
       content = <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />;
     } else if (guessRound > 0) {
-      content = <GameOverScreen roundsNumber={guessRound} userNumber={userNumber} onRestart={configureNewGameHandler} time={myTimer} />;
+      content = <GameOverScreen roundsNumber={guessRound} userNumber={userNumber} onRestart={configureNewGameHandler} onHallOfFame={HallOfFameHandler}/>;
     }
 
 
