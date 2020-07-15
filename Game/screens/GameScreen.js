@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect, Component } from "react";
-import { View, StyleSheet, Text, Button, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  Alert,
+  ScrollView,
+} from "react-native";
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
 import Timer from "../components/Timer";
@@ -17,11 +24,17 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
+const renderListItem = (value, nbOfRound) => (
+  <View key={value} style={styles.listItem}>
+    <Text>#{nbOfRound}</Text>
+    <Text>{value}</Text>
+  </View>
+);
+
 const GameScreen = (props) => {
-  const [currentGuess, setCurrentGuess] = useState(
-    generateRandomBetween(1, 100, props.userChoice)
-  );
-  const [pastGuess, setpastGuess] = useState([]);
+  const initialGuess = generateRandomBetween(1, 100, props.userChoice);
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [pastGuess, setpastGuess] = useState([initialGuess]);
   //timer
   const [myTimer, setMyTimer] = useState(0);
 
@@ -38,7 +51,7 @@ const GameScreen = (props) => {
   //Page_Load
   useEffect(() => {
     if (currentGuess === props.userChoice) {
-      props.onGameOver(rounds);
+      props.onGameOver(pastGuess.length);
     }
   }, [currentGuess, userChoice, onGameOver, Timer]);
 
@@ -63,7 +76,7 @@ const GameScreen = (props) => {
     if (direction === "lower") {
       currentHigh.current = currentGuess;
     } else {
-      currentLow.current = currentGuess;
+      currentLow.current = currentGuess + 1;
     }
     const nextNumber = generateRandomBetween(
       currentLow.current,
@@ -71,7 +84,7 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(nextNumber);
-    setpastGuess(curPastGuest=>[nextNumber,...curPastGuest]);
+    setpastGuess((curPastGuest) => [nextNumber, ...curPastGuest]);
   };
 
   const getCurrentTime = (time) => {
@@ -95,11 +108,20 @@ const GameScreen = (props) => {
           <Ionicons name="md-remove" size={24} color="white" />
         </MainBtn>
         <MainBtn onPress={nextGameHandler.bind(this, "higher")}>
-          <Ionicons name = "md-add" size={24} color="white"/>
-          </MainBtn>
+          <Ionicons name="md-add" size={24} color="white" />
+        </MainBtn>
         {/* <Button title="LOWER" onPress={nextGameHandler.bind(this, "lower")} />
         <Button title="HIGHER" onPress={nextGameHandler.bind(this, "higher")} /> */}
       </Card>
+
+      <View style={styles.list}>
+        <ScrollView contentContainerStyle={styles.listScroll}>
+          {pastGuess.map((guess) => renderListItem(guess))}
+        </ScrollView>
+      </View>
+        
+      
+
     </View>
   );
 };
@@ -116,6 +138,23 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     alignItems: "center",
+  },
+  list: {
+    width: "80%",
+    flex:1,
+  },
+  listScroll:{
+    flexGrow:1,
+    alignContent:'center',
+    justifyContent:'flex-end',
+  },
+  listItem: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 15,
+    marginVertical: 10,
+    backgroundColor: 'white',
+    flexDirection: 'row',
   },
 });
 
