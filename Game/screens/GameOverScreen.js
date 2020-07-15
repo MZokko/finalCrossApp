@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Button,
   Vibration,
+  Image,
 } from "react-native";
 import Colors from "../constants/color";
 import Card from "../components/Card";
@@ -13,8 +14,22 @@ import firebase from "firebase";
 const GameOverScreen = props => {
   return (
     <View style={styles.screen}>
+      
+      <View style={styles.imageConTainer}>
+
+        <Image 
+        source={require('../image/6197_poster.png') } 
+        //source={{uri:''}} web source
+        styles={styles.image} resizeMode ="cover"/>
+
+      </View>
+
       <Card>
         <Text> Game is over</Text>
+
+
+        
+        
         <Text>Number was :{props.userNumber}</Text>
         <Text>Number of Round :{props.roundsNumber}</Text>
         {/* <Text>Timer :{props.time}</Text> */}
@@ -68,15 +83,28 @@ const GameOverScreen = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   btnContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 20,
     width: 300,
-    maxWidth: "80%"
+    maxWidth: '80%',
+  },
+  imageConTainer:{
+    width:300,
+    height:300,
+    borderRadius: 150,
+    borderWidth: 3,
+    borderColor: 'black',
+    overflow: 'hidden',
+    marginVertical: 30,
+  },
+  image : {
+    width: '100%',
+    height: '100%',
   }
 });
 

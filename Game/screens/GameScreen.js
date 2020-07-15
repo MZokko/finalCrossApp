@@ -3,6 +3,8 @@ import { View, StyleSheet, Text, Button, Alert } from "react-native";
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
 import Timer from "../components/Timer";
+import MainBtn from "../components/MainBtn";
+import { Ionicons } from "@expo/vector-icons";
 
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -15,11 +17,11 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
-const GameScreen = props => {
+const GameScreen = (props) => {
   const [currentGuess, setCurrentGuess] = useState(
     generateRandomBetween(1, 100, props.userChoice)
   );
-  const [rounds, setRounds] = useState(0);
+  const [pastGuess, setpastGuess] = useState([]);
   //timer
   const [myTimer, setMyTimer] = useState(0);
 
@@ -32,15 +34,13 @@ const GameScreen = props => {
 
   let timer;
 
-  
-
   //useEffect allow to use logic after every cycle
   //Page_Load
   useEffect(() => {
     if (currentGuess === props.userChoice) {
       props.onGameOver(rounds);
     }
-  }, [currentGuess, userChoice, onGameOver,Timer]);
+  }, [currentGuess, userChoice, onGameOver, Timer]);
 
   const nextGameHandler = (direction, myTimer) => {
     setMyTimer(myTimer);
@@ -55,7 +55,7 @@ const GameScreen = props => {
       (direction === "higher" && currentGuess > props.userChoice)
     ) {
       Alert.alert("Don't lie !", "You know this is wrong...", [
-        { text: "my Bad", style: "cancel" }
+        { text: "my Bad", style: "cancel" },
       ]);
       return;
     }
@@ -71,10 +71,10 @@ const GameScreen = props => {
       currentGuess
     );
     setCurrentGuess(nextNumber);
-    setRounds(currentRounds => currentRounds + 1);
+    setpastGuess(curPastGuest=>[nextNumber,...curPastGuest]);
   };
 
-  const getCurrentTime = time => {
+  const getCurrentTime = (time) => {
     console.log("time:", time, new Date().getMilliseconds() + "ms");
     timer = time;
     setMyTimer(time);
@@ -91,8 +91,14 @@ const GameScreen = props => {
       <NumberContainer>{currentGuess}</NumberContainer>
 
       <Card style={styles.btnContainer}>
-        <Button title="LOWER" onPress={nextGameHandler.bind(this, "lower")} />
-        <Button title="HIGHER" onPress={nextGameHandler.bind(this, "higher")} />
+        <MainBtn onPress={nextGameHandler.bind(this, "lower")}>
+          <Ionicons name="md-remove" size={24} color="white" />
+        </MainBtn>
+        <MainBtn onPress={nextGameHandler.bind(this, "higher")}>
+          <Ionicons name = "md-add" size={24} color="white"/>
+          </MainBtn>
+        {/* <Button title="LOWER" onPress={nextGameHandler.bind(this, "lower")} />
+        <Button title="HIGHER" onPress={nextGameHandler.bind(this, "higher")} /> */}
       </Card>
     </View>
   );
@@ -104,13 +110,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     marginTop: 20,
     width: 300,
-    maxWidth: "80%"
+    maxWidth: "90%",
   },
   screen: {
     flex: 1,
     padding: 10,
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 export default GameScreen;
