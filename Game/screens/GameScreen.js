@@ -6,6 +6,7 @@ import {
   Button,
   Alert,
   ScrollView,
+  FlatList,
 } from "react-native";
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
@@ -23,18 +24,18 @@ const generateRandomBetween = (min, max, exclude) => {
     return randNum;
   }
 };
-
-const renderListItem = (value, nbOfRound) => (
-  <View key={value} style={styles.listItem}>
-    <Text>#{nbOfRound}</Text>
-    <Text>{value}</Text>
+ 
+const renderListItem = (listLength, itemData) => (
+  <View style={styles.listItem}>
+    <Text>{listLength - itemData.index} #</Text>
+    <Text>{itemData.item}</Text>
   </View>
 );
 
 const GameScreen = (props) => {
   const initialGuess = generateRandomBetween(1, 100, props.userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
-  const [pastGuess, setpastGuess] = useState([initialGuess]);
+  const [pastGuess, setpastGuess] = useState([initialGuess.toString()]);
   //timer
   const [myTimer, setMyTimer] = useState(0);
 
@@ -84,7 +85,7 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(nextNumber);
-    setpastGuess((curPastGuest) => [nextNumber, ...curPastGuest]);
+    setpastGuess((curPastGuest) => [nextNumber.toString(), ...curPastGuest]);
   };
 
   const getCurrentTime = (time) => {
@@ -115,13 +116,15 @@ const GameScreen = (props) => {
       </Card>
 
       <View style={styles.list}>
-        <ScrollView contentContainerStyle={styles.listScroll}>
-          {pastGuess.map((guess) => renderListItem(guess))}
-        </ScrollView>
+        <FlatList
+          keyExtractor={(item) => {item;}}
+          data={pastGuess}
+          renderItem={renderListItem.bind(this, pastGuess.length)}
+        />
+        {/* <ScrollView contentContainerStyle={styles.listScroll}>
+          {pastGuess.map((guess, index) => renderListItem(guess, pastGuess))}
+        </ScrollView> */}
       </View>
-        
-      
-
     </View>
   );
 };
@@ -141,20 +144,20 @@ const styles = StyleSheet.create({
   },
   list: {
     width: "80%",
-    flex:1,
+    flex: 1,
   },
-  listScroll:{
-    flexGrow:1,
-    alignContent:'center',
-    justifyContent:'flex-end',
+  listScroll: {
+    flexGrow: 1,
+    alignContent: "center",
+    justifyContent: "flex-end",
   },
   listItem: {
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     padding: 15,
     marginVertical: 10,
-    backgroundColor: 'white',
-    flexDirection: 'row',
+    backgroundColor: "white",
+    flexDirection: "row",
   },
 });
 
